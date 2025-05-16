@@ -8,12 +8,14 @@ I’m a Computer Science Engineer from the Universidad de San Carlos de Guatemal
 <ul id="pages-sites"></ul>
 
 <script>
+  const reposAExcluir = ['luisespino.github.io', 'test'];
+
   fetch('https://api.github.com/users/luisespino/repos')
     .then(res => res.json())
     .then(data => {
       const list = document.getElementById('pages-sites');
       data
-        .filter(repo => repo.has_pages)
+        .filter(repo => repo.has_pages && !reposAExcluir.includes(repo.name))
         .forEach(repo => {
           const li = document.createElement('li');
           li.innerHTML = `<a href="https://${repo.owner.login}.github.io/${repo.name}/">${repo.name}</a>`;
