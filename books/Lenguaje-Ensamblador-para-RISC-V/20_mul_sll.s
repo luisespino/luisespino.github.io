@@ -1,0 +1,11 @@
+.global _start
+
+.text
+_start:
+    li t0, 32               # load number to multiply 32
+    li t1, 2                # load exp in power 2 of 4
+    sll a0, t0, t1          # a0 = 32 * 4
+
+    li a7, 93               # exit
+    ecall
+    
