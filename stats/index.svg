@@ -1,0 +1,80 @@
+<!-- index.svg -->
+<svg width="600" height="140" viewBox="0 0 600 140" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="20" fill="#f0f0f0" rx="4" ry="4"/>
+  <!-- Aquí va el resto de tu SVG generado dinámicamente -->
+  <script>
+    // Tu código JavaScript para generar el SVG dinámico
+    const repoOwner = "luisespino";
+    const repoName = "data-structures";
+    
+    async function fetchLanguages() {
+      const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/languages`);
+      const data = await res.json();
+      const total = Object.values(data).reduce((a, b) => a + b, 0);
+      const filtered = Object.entries(data)
+        .filter(([lang]) => !["HTML"].includes(lang))
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+
+      let svgInner = '';
+      let accumulated = 0;
+      filtered.forEach(([lang, bytes]) => {
+        const percent = (bytes / total) * 100;
+        const color = {
+          JavaScript: "#f1e05a",
+          Python: "#3572A5",
+          Java: "#b07219",
+          C: "#555555",
+          "C++": "#f34b7d",
+          Shell: "#89e051",
+          CSS: "#563d7c",
+          Other: "#cccccc"
+        }[lang] || "#cccccc";
+
+        svgInner += `<rect x="${accumulated}%" width="${percent}%" height="20" fill="${color}" rx="4" ry="4"/>`;
+        accumulated += percent;
+      });
+
+      // Actualiza el SVG con los datos
+      document.querySelector("svg").innerHTML += svgInner;
+    }
+
+    fetchLanguages();
+  </script>
+</svg>
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Language Bar</title>
+  <style>
+    .lang-bar {
+      display: flex;
+      height: 20px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .lang-segment {
+      height: 100%;
+    }
+    .lang-legend {
+      font-family: sans-serif;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <h3>Lenguaje del repositorio</h3>
+  <div class="lang-bar" id="langBar"></div>
+  <div id="legend" class="lang-legend"></div>
+
+  <script src="langbar.js"></script>
+
+</body>
+</html>
+-->
